@@ -3,7 +3,7 @@ package server.controller.command.impl;
 import server.app.AppContext;
 import server.controller.command.Command;
 import server.exception.ServiceException;
-import server.service.ProductManager;
+import server.service.ProductService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
