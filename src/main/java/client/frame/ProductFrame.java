@@ -20,4 +20,5 @@ public class ProductFrame extends SocketJFrame {
     private JButton myOrdersButton;
     private JButton deleteButton;
 
+
 }
