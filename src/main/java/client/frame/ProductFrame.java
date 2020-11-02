@@ -1,24 +1,60 @@
 package client.frame;
 
-import client.main.SocketJFrame;
-
 import javax.swing.*;
+import java.awt.event.*;
 
-public class ProductFrame extends SocketJFrame {
+public class ProductFrame extends JDialog {
+    private JPanel contentPane;
+    private JButton buttonOK;
+    private JButton buttonCancel;
 
-    private final OrderFrame orderFrame = new OrderFrame();
-    private final LoginFrame loginFrame = new LoginFrame();
+    public ProductFrame() {
+        setContentPane(contentPane);
+        setModal(true);
+        getRootPane().setDefaultButton(buttonOK);
 
-    private DefaultListModel model = new DefaultListModel();
-    private JPanel mainPanel;
-    private JList productList;
-    private JLabel userNameLabel = new JLabel();
-    private JButton loginButton = new JButton("Вход");
-    private JButton logoutButton = new JButton("Выход");
-    private JButton infoButton;
-    private JButton toOrderButton;
-    private JButton myOrdersButton;
-    private JButton deleteButton;
+        buttonOK.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                onOK();
+            }
+        });
 
+        buttonCancel.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                onCancel();
+            }
+        });
 
+        // call onCancel() when cross is clicked
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                onCancel();
+            }
+        });
+
+        // call onCancel() on ESCAPE
+        contentPane.registerKeyboardAction(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                onCancel();
+            }
+        }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+    }
+
+    private void onOK() {
+        // add your code here
+        dispose();
+    }
+
+    private void onCancel() {
+        // add your code here if necessary
+        dispose();
+    }
+
+    public static void main(String[] args) {
+        ProductFrame dialog = new ProductFrame();
+        dialog.pack();
+        dialog.setVisible(true);
+        System.exit(0);
+    }
 }
