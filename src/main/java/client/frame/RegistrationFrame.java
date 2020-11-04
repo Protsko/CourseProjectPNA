@@ -1,60 +1,61 @@
 package client.frame;
 
+import client.main.SocketJFrame;
+
 import javax.swing.*;
-import java.awt.event.*;
+import java.awt.*;
 
-public class RegistrationFrame extends JDialog {
-    private JPanel contentPane;
-    private JButton buttonOK;
-    private JButton buttonCancel;
+public class RegistrationFrame extends SocketJFrame {
 
-    public RegistrationFrame() {
-        setContentPane(contentPane);
-        setModal(true);
-        getRootPane().setDefaultButton(buttonOK);
+    private final LoginFrame loginFrame;
 
-        buttonOK.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onOK();
-            }
-        });
+    private JTextField loginField;
+    private JTextField passwordField;
+    private JTextField confirmPasswordField;
+    private JButton submitButton;
+    private JPanel mainPanel;
+    private JButton backButton;
 
-        buttonCancel.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onCancel();
-            }
-        });
-
-        // call onCancel() when cross is clicked
-        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-        addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                onCancel();
-            }
-        });
-
-        // call onCancel() on ESCAPE
-        contentPane.registerKeyboardAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onCancel();
-            }
-        }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+    public RegistrationFrame(LoginFrame loginFrame) {
+        this.loginFrame = loginFrame;
+        setSize(300, 180);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setResizable(false);
+        setTitle("Registration");
+        setContentPane(mainPanel);
+        initButtons();
     }
 
-    private void onOK() {
-        // add your code here
-        dispose();
-    }
-
-    private void onCancel() {
-        // add your code here if necessary
-        dispose();
-    }
-
-    public static void main(String[] args) {
-        RegistrationFrame dialog = new RegistrationFrame();
-        dialog.pack();
-        dialog.setVisible(true);
-        System.exit(0);
+    private void initButtons() {
+        submitButton.addActionListener(e -> {
+            String login = loginField.getText();
+            String password = passwordField.getText();
+            String confirmPassword = confirmPasswordField.getText();
+            if (confirmPassword.equals(password)) {
+                String query = "command=registration&login=" + login + "&password=" + password;
+                String response = super.doRequest(query);
+                if (response.startsWith("result=") && response.replace("result=", "").equals("true")) {
+                    loginField.setBackground(Color.WHITE);
+                    passwordField.setBackground(Color.WHITE);
+                    confirmPasswordField.setBackground(Color.WHITE);
+                    this.setVisible(false);
+                    this.setEnabled(false);
+                    loginFrame.setVisible(true);
+                    loginFrame.setEnabled(true);
+                } else {
+                    loginField.setBackground(Color.RED);
+                    passwordField.setBackground(Color.RED);
+                }
+            } else {
+                confirmPasswordField.setBackground(Color.RED);
+            }
+        });
+        backButton.addActionListener(e -> {
+            this.setVisible(false);
+            this.setEnabled(false);
+            loginFrame.setVisible(true);
+            loginFrame.setEnabled(true);
+        });
     }
 }

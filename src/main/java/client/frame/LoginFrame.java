@@ -1,60 +1,67 @@
 package client.frame;
 
-import javax.swing.*;
-import java.awt.event.*;
+import client.entity.User;
+import client.entity.UserRole;
+import client.main.*;
 
-public class LoginFrame extends JDialog {
-    private JPanel contentPane;
-    private JButton buttonOK;
-    private JButton buttonCancel;
+import javax.swing.*;
+import java.awt.*;
+
+public class LoginFrame extends SocketJFrame {
+
+    private final RegistrationFrame registrationFrame = new RegistrationFrame(this);
+    private final ProductFrame productFrame = new ProductFrame(this);
+
+    private JTextField loginTextField;
+    private JPanel mainPanel;
+    private JTextField passwordTextField;
+    private JButton confirmButton;
+    private JButton registrationButton;
 
     public LoginFrame() {
-        setContentPane(contentPane);
-        setModal(true);
-        getRootPane().setDefaultButton(buttonOK);
-
-        buttonOK.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onOK();
-            }
-        });
-
-        buttonCancel.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onCancel();
-            }
-        });
-
-        // call onCancel() when cross is clicked
-        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-        addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                onCancel();
-            }
-        });
-
-        // call onCancel() on ESCAPE
-        contentPane.registerKeyboardAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onCancel();
-            }
-        }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        registrationFrame.setEnabled(false);
+        productFrame.setEnabled(false);
+        setSize(300, 200);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setResizable(false);
+        setTitle("Login");
+        setContentPane(mainPanel);
+        setVisible(true);
+        initButtons();
     }
 
-    private void onOK() {
-        // add your code here
-        dispose();
-    }
-
-    private void onCancel() {
-        // add your code here if necessary
-        dispose();
-    }
-
-    public static void main(String[] args) {
-        LoginFrame dialog = new LoginFrame();
-        dialog.pack();
-        dialog.setVisible(true);
-        System.exit(0);
+    private void initButtons() {
+        confirmButton.addActionListener(e -> {
+            String login = loginTextField.getText();
+            String password = passwordTextField.getText();
+            String query = "command=login&login=" + login + "&password=" + password;
+            String response = super.doRequest(query);
+            if (response.startsWith("result=") && !response.replace("result=", "").equals("false")) {
+                String[] respParams = response.split("&");
+                User currentUser = new User(
+                        Long.parseLong(respParams[1].replace("id=", "")),
+                        respParams[2].replace("login=", ""),
+                        respParams[3].replace("password=", ""),
+                        UserRole.valueOf(respParams[4].replace("role=", ""))
+                );
+                loginTextField.setBackground(Color.WHITE);
+                passwordTextField.setBackground(Color.WHITE);
+                super.login(currentUser);
+                this.setVisible(false);
+                this.setEnabled(false);
+                productFrame.setVisible();
+                productFrame.setEnabled(true);
+            } else {
+                loginTextField.setBackground(Color.RED);
+                passwordTextField.setBackground(Color.RED);
+            }
+        });
+        registrationButton.addActionListener(e -> {
+            this.setVisible(false);
+            this.setEnabled(false);
+            registrationFrame.setVisible(true);
+            registrationFrame.setEnabled(true);
+        });
     }
 }
