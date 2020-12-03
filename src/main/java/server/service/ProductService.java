@@ -22,6 +22,16 @@ public class ProductService {
         }
     }
 
+    public Product addProduct(String name, Double price, String description, boolean isAvailable) throws ServiceException{
+        Product product = new Product(null, name, price, description, isAvailable);
+        try {
+            productDao.save(product);
+            return product;
+        } catch (DaoException e) {
+            throw new ServiceException("Product hasn't been added", e);
+        }
+    }
+
     public void deleteProduct(Integer id) throws ServiceException {
         try {
             productDao.delete(id);

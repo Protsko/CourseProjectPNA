@@ -1,9 +1,8 @@
-package client.frame;
+package client.main;
 
 import client.entity.Product;
 import client.entity.User;
 import client.entity.UserRole;
-import client.main.SocketJFrame;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicButtonUI;
@@ -13,7 +12,9 @@ import java.util.List;
 
 public class ProductFrame extends SocketJFrame {
 
+    private final DataFrame dataFrame = new DataFrame();
     private final OrderFrame orderFrame = new OrderFrame();
+    private final CommentFrame commentFrame = new CommentFrame();
     private final LoginFrame loginFrame;
 
     private DefaultListModel model = new DefaultListModel();
@@ -22,9 +23,11 @@ public class ProductFrame extends SocketJFrame {
     private JLabel userNameLabel = new JLabel();
     private JButton logoutButton = new JButton("logout");
     private JButton infoButton;
+    private JButton commentButton;
     private JButton toOrderButton;
     private JButton myOrdersButton;
-    private JButton deleteButton;
+    private JButton dataButton;
+    private JButton refreshButton;
 
     public ProductFrame(LoginFrame loginFrame) {
         this.loginFrame = loginFrame;
@@ -50,13 +53,13 @@ public class ProductFrame extends SocketJFrame {
             loginFrame.setEnabled(true);
         });
         infoButton.addActionListener(e -> {
-            int selectedIndex = productList.getSelectedIndex();
+            int selectedIndex = productList.getSelectedIndex() - 3;
             List<Product> currentProducts = super.getCurrentProducts();
             Product product = currentProducts.get(selectedIndex);
             JOptionPane.showMessageDialog(this, product.getDescription());
         });
         toOrderButton.addActionListener(e -> {
-            int selectedIndex = productList.getSelectedIndex();
+            int selectedIndex = productList.getSelectedIndex() - 3;
             String userId = super.getCurrentUser().getId().toString();
             List<Product> products = super.getCurrentProducts();
             Product currentProduct = products.get(selectedIndex);
@@ -77,20 +80,32 @@ public class ProductFrame extends SocketJFrame {
         myOrdersButton.addActionListener(e -> {
             orderFrame.setVisible();
         });
-        deleteButton.addActionListener(e -> {
-            int selectedIndex = productList.getSelectedIndex();
+        commentButton.addActionListener(e -> {
+            int selectedIndex = productList.getSelectedIndex() - 3;
             List<Product> currentProducts = super.getCurrentProducts();
             Product product = currentProducts.get(selectedIndex);
-            super.doRequest("command=delete_product&id=" + product.getId());
-            productList.remove(selectedIndex);
+            commentFrame.setVisible(product.getId());
+        });
+        refreshButton.addActionListener(e -> {
+            fillProductList();
+        });
+        dataButton.addActionListener(e -> {
+            dataFrame.setVisible();
         });
     }
 
     private void fillProductList() {
+        model.removeAllElements();
         String response = super.doRequest("command=get_products");
         if (!response.equals("result=error") && !response.equals("")) {
             String[] products = response.split("&");
             List<Product> currentProducts = new ArrayList<>();
+            String head1 = "||==============================||=====================||==========================||";
+            String head2 = "||                        Название                          ||                   Цена                   ||                     Наличие                     ||";
+            String head3 = "||==============================||=====================||==========================||";
+            model.addElement(head1);
+            model.addElement(head2);
+            model.addElement(head3);
             for (String product : products) {
                 String[] productFields = product.split(",");
 
@@ -102,14 +117,21 @@ public class ProductFrame extends SocketJFrame {
                 Product pr = new Product(id, name, price, description, isAvailable);
                 currentProducts.add(pr);
 
-                String elem = name + ". Price: " + price;
+                StringBuilder str = new StringBuilder("                                       ");
+                str.delete(15,name.length()+15);
+                str.replace(15,name.length()+15, name);
+
+
+                String elem = "|| " + str + "                            ||                   " + price + "                   ||                   ";
                 if (isAvailable) {
-                    elem += ". Is available!";
+                    elem += "Is available                    ||";
                 } else {
-                    elem += ". Not available!";
+                    elem += "Not available                 ||";
                 }
                 model.addElement(elem);
             }
+            String futter = "||==============================||=====================||==========================||";
+            model.addElement(futter);
             super.setCurrentProducts(currentProducts);
         }
     }
@@ -128,11 +150,15 @@ public class ProductFrame extends SocketJFrame {
         User user = super.getCurrentUser();
         userNameLabel.setText("login: " + user.getLogin());
         if (user.getUserRole() == UserRole.USER) {
-            deleteButton.setVisible(false);
-            deleteButton.setEnabled(false);
+            dataButton.setVisible(false);
+            dataButton.setEnabled(false);
+            refreshButton.setVisible(false);
+            refreshButton.setEnabled(false);
         } else {
-            deleteButton.setVisible(true);
-            deleteButton.setEnabled(true);
+            dataButton.setVisible(true);
+            dataButton.setEnabled(true);
+            refreshButton.setVisible(true);
+            refreshButton.setEnabled(true);
         }
     }
 }

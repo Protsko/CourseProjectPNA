@@ -9,7 +9,7 @@ public class ServerMain {
     public static void main(String[] args){
         MainController controller = new MainController();
         try{
-            ServerSocket serverSocket = new ServerSocket(8100);
+            ServerSocket serverSocket = new ServerSocket(8020);
             while (true){
                 controller.processRequest(serverSocket.accept());
             }

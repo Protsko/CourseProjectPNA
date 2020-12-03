@@ -1,6 +1,4 @@
-package client.frame;
-
-import client.main.SocketJFrame;
+package client.main;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,7 +20,7 @@ public class RegistrationFrame extends SocketJFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
-        setTitle("Registration");
+        setTitle("Регистрация");
         setContentPane(mainPanel);
         initButtons();
     }

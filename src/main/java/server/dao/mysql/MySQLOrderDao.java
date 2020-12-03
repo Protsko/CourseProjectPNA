@@ -67,4 +67,17 @@ public class MySQLOrderDao implements OrderDao {
             throw new DaoException("Error in deleting order", e);
         }
     }
+
+    @Override
+    public void delete(Integer orderId) throws DaoException {
+        try {
+            Connection connection = ConnectionManager.getInstance().getConnection();
+            try (PreparedStatement statement = connection.prepareStatement(SQLConstant.DELETE_ORDER)) {
+                statement.setInt(1, orderId);
+                statement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            throw new DaoException("Error in deleting order", e);
+        }
+    }
 }

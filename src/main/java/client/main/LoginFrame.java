@@ -1,8 +1,7 @@
-package client.frame;
+package client.main;
 
 import client.entity.User;
 import client.entity.UserRole;
-import client.main.*;
 
 import javax.swing.*;
 import java.awt.*;

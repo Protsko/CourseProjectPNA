@@ -1,8 +1,8 @@
-package client.frame;
+package client.main;
 
 import client.entity.Order;
 import client.entity.Product;
-import client.main.SocketJFrame;
+import client.main.*;
 import com.sun.org.apache.xpath.internal.operations.Or;
 
 import javax.swing.*;
@@ -16,13 +16,14 @@ public class OrderFrame extends SocketJFrame {
     private JButton toPayButton;
     private JButton toCommentButton;
     private JList orderList;
+    private JButton deleteOrderButton;
 
     public OrderFrame() {
         setSize(500, 300);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         setResizable(false);
-        setTitle("Login");
+        setTitle("Orders");
         setContentPane(mainPanel);
         orderList.setModel(model);
         initButtons();
@@ -59,8 +60,6 @@ public class OrderFrame extends SocketJFrame {
         }
     }
 
-
-
     private void initButtons() {
         toPayButton.addActionListener(e -> {
             int selectedIndex = orderList.getSelectedIndex();
@@ -74,7 +73,17 @@ public class OrderFrame extends SocketJFrame {
             List<Order> orders = super.getCurrentOrders();
             Order order = orders.get(selectedIndex);
             String orderId = order.getId().toString();
-
+            String text = JOptionPane.showInputDialog("Input comment text: ");
+            String query = "command=add_comment&productId=" + order.getProductId() + "&userId=" + getCurrentUser().getId() + "&commentText=" + text;
+            super.doRequest(query);
+        });
+        deleteOrderButton.addActionListener(e -> {
+            int selectedIndex = orderList.getSelectedIndex();
+            List<Order> orders = super.getCurrentOrders();
+            Order order = orders.get(selectedIndex);
+            super.doRequest("command=delete_order&id=" + order.getId());
+            orders.remove(selectedIndex);
+            model.remove(selectedIndex);
         });
     }
 

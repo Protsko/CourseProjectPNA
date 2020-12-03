@@ -11,4 +11,6 @@ public interface OrderDao {
     List<Order> getOrdersByUserId(Long userId) throws DaoException;
 
     void update(Integer orderId) throws DaoException;
+
+    void delete(Integer productId) throws DaoException;
 }

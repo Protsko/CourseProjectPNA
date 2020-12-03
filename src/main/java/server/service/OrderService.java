@@ -38,4 +38,12 @@ public class OrderService {
             throw new ServiceException("Order status hasn't been updated", e);
         }
     }
+
+    public void deleteOrder(Integer id) throws ServiceException {
+        try {
+            orderDao.delete(id);
+        } catch (DaoException e) {
+            throw new ServiceException("Order hasn't been deleted", e);
+        }
+    }
 }
