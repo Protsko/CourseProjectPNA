@@ -65,12 +65,11 @@ public class Order {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Order{");
+        final StringBuilder sb = new StringBuilder();
         sb.append("id=").append(id);
-        sb.append(", userId=").append(userId);
-        sb.append(", productId=").append(productId);
-        sb.append(", isPayed=").append(isPayed);
-        sb.append('}');
+        sb.append(",userId=").append(userId);
+        sb.append(",productId=").append(productId);
+        sb.append(",isPayed=").append(isPayed);
         return sb.toString();
     }
 }

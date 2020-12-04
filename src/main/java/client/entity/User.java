@@ -66,12 +66,11 @@ public class User {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("User{");
+        final StringBuilder sb = new StringBuilder();
         sb.append("id=").append(id);
-        sb.append(", login='").append(login).append('\'');
-        sb.append(", password='").append(password).append('\'');
-        sb.append(", userRole=").append(userRole);
-        sb.append('}');
+        sb.append(",login=").append(login);
+        sb.append(",password=").append(password);
+        sb.append(",userRole=").append(userRole);
         return sb.toString();
     }
 }

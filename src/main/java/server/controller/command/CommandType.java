@@ -16,7 +16,8 @@ public enum CommandType {
     DELETE_COMMENT(new DeleteCommentCommandImpl()),
     GET_COMMENT(new GetCommentCommandImpl()),
     PAY_ORDER(new PayCommandImpl()),
-    DELETE_ORDER(new DeleteOrderCommandImpl());
+    DELETE_ORDER(new DeleteOrderCommandImpl()),
+    GET_USER_LOGIN(new GetUserLoginCommandImpl());
 
     private final Command command;
 

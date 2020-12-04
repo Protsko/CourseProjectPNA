@@ -35,8 +35,31 @@ public class MySQLUserDao implements UserDao {
         User user = null;
         try {
             Connection connection = ConnectionManager.getInstance().getConnection();
-            try (PreparedStatement statement = connection.prepareStatement(SQLConstant.SELECT_USER)) {
+            try (PreparedStatement statement = connection.prepareStatement(SQLConstant.SELECT_USER_LOGIN)) {
                 statement.setString(1, login);
+                ResultSet resultSet = statement.executeQuery();
+                if (resultSet.next()) {
+                    user = new User(
+                            resultSet.getLong("id"),
+                            resultSet.getString("user_login"),
+                            resultSet.getString("user_password"),
+                            UserRole.getRoleById(resultSet.getInt("user_role"))
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            throw new DaoException("Error in getting user by user_login", e);
+        }
+        return user;
+    }
+
+    @Override
+    public User getUserById(Long id) throws DaoException {
+        User user = null;
+        try {
+            Connection connection = ConnectionManager.getInstance().getConnection();
+            try (PreparedStatement statement = connection.prepareStatement(SQLConstant.SELECT_USER_ID)) {
+                statement.setLong(1, id);
                 ResultSet resultSet = statement.executeQuery();
                 if (resultSet.next()) {
                     user = new User(

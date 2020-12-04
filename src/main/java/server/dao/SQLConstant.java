@@ -2,7 +2,9 @@ package server.dao;
 
 public class SQLConstant {
     public static final String INSERT_USER = "INSERT INTO user_account ({0}) VALUES ({1})";
-    public static final String SELECT_USER = "SELECT * FROM user_account WHERE user_login=?";
+    public static final String SELECT_USER_LOGIN = "SELECT * FROM user_account WHERE user_login=?";
+    public static final String SELECT_USER_ID = "SELECT * FROM user_account WHERE id=?";
+
 
     public static final String INSERT_PRODUCT = "INSERT INTO product ({0}) VALUES ({1})";
     public static final String SELECT_PRODUCT = "SELECT * FROM product";

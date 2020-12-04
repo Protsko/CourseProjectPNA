@@ -65,12 +65,11 @@ public class Comment {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Comment{");
+        final StringBuilder sb = new StringBuilder();
         sb.append("id=").append(id);
-        sb.append(", productId=").append(productId);
-        sb.append(", userId=").append(userId);
-        sb.append(", commentText='").append(commentText).append('\'');
-        sb.append('}');
+        sb.append(",productId=").append(productId);
+        sb.append(",userId=").append(userId);
+        sb.append(",commentText=").append(commentText);
         return sb.toString();
     }
 }

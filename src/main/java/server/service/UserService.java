@@ -34,4 +34,12 @@ public class UserService {
         }
         return null;
     }
+
+    public User getUserById(Long id) throws ServiceException {
+        try {
+            return userDao.getUserById(id);
+        } catch (DaoException e) {
+            throw new ServiceException("User hasn't been found", e);
+        }
+    }
 }

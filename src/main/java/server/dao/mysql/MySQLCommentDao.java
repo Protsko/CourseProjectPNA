@@ -14,12 +14,12 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MySQLComeentDao implements CommentDao {
+public class MySQLCommentDao implements CommentDao {
     @Override
     public void save(Comment comment) throws DaoException {
         try {
             Connection connection = ConnectionManager.getInstance().getConnection();
-            String sql = MessageFormat.format(SQLConstant.INSERT_COMMENT, "product_id, user_account_id, comment_id", "?, ?, ?");
+            String sql = MessageFormat.format(SQLConstant.INSERT_COMMENT, "product_id, user_account_id, comment_text", "?, ?, ?");
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setInt(1, comment.getProductId());
                 statement.setLong(2, comment.getUserId());
@@ -37,6 +37,7 @@ public class MySQLComeentDao implements CommentDao {
         try {
             Connection connection = ConnectionManager.getInstance().getConnection();
             try (PreparedStatement statement = connection.prepareStatement(SQLConstant.SELECT_COMMENT)) {
+                statement.setInt(1,productId);
                 ResultSet resultSet = statement.executeQuery();
                 while (resultSet.next()) {
                     Comment comment = new Comment(

@@ -73,6 +73,7 @@ public class CommentFrame extends SocketJFrame {
     }
 
     private void fillCommentList() {
+        model.removeAllElements();
         String query = "command=get_comment&productId=" + productId;
         String response = super.doRequest(query);
         if (!response.equals("result=error") && !response.equals("")) {
@@ -86,8 +87,12 @@ public class CommentFrame extends SocketJFrame {
                 Long userId = Long.parseLong(commentFields[2].replace("userId=", ""));
                 String commentText = commentFields[3].replace("commentText=", "");
                 Comment com = new Comment(id, productId, userId, commentText);
+                String queryUser = "command=get_user_login&userId=" + userId;
+                String responseLogin = super.doRequest(queryUser);
+
+                String elem = com.getCommentText() + " : " + responseLogin;
                 comments.add(com);
-                model.addElement(com.getCommentText());
+                model.addElement(elem);
             }
         }
     }

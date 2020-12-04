@@ -101,7 +101,7 @@ public class ProductFrame extends SocketJFrame {
             String[] products = response.split("&");
             List<Product> currentProducts = new ArrayList<>();
             String head1 = "||==============================||=====================||==========================||";
-            String head2 = "||                        Название                          ||                   Цена                   ||                     Наличие                     ||";
+            String head2 = "||                         Название                           ||                   Цена                   ||                     Наличие                      ||";
             String head3 = "||==============================||=====================||==========================||";
             model.addElement(head1);
             model.addElement(head2);
@@ -118,8 +118,8 @@ public class ProductFrame extends SocketJFrame {
                 currentProducts.add(pr);
 
                 StringBuilder str = new StringBuilder("                                       ");
-                str.delete(15,name.length()+15);
-                str.replace(15,name.length()+15, name);
+                str.delete(5,name.length()+5);
+                str.replace(5,name.length()+5, name);
 
 
                 String elem = "|| " + str + "                            ||                   " + price + "                   ||                   ";

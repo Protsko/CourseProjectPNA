@@ -7,4 +7,6 @@ public interface UserDao {
     void save(User user) throws DaoException;
 
     User getUserByLogin(String login) throws DaoException;
+
+    User getUserById(Long id) throws DaoException;
 }
