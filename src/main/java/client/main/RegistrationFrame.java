@@ -16,7 +16,7 @@ public class RegistrationFrame extends SocketJFrame {
 
     public RegistrationFrame(LoginFrame loginFrame) {
         this.loginFrame = loginFrame;
-        setSize(300, 180);
+        setSize(400, 250);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
